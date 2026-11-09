@@ -2,8 +2,10 @@
 
 from default_quizzes import create_default_quizzes
 from input_utils import read_int
+from quiz import Quiz
 
 LINE = "=" * 40
+THIN_LINE = "-" * 40
 
 
 class QuizGame:
@@ -20,7 +22,7 @@ class QuizGame:
             self.show_menu()
             choice = read_int("선택: ", 1, 5)
             if choice == 1:
-                print("\n🚧 퀴즈 풀기 기능은 준비 중입니다.")
+                self.play_quiz()
             elif choice == 2:
                 print("\n🚧 퀴즈 추가 기능은 준비 중입니다.")
             elif choice == 3:
@@ -42,6 +44,37 @@ class QuizGame:
         print("4. 점수 확인")
         print("5. 종료")
         print(LINE)
+
+    def play_quiz(self):
+        """저장된 퀴즈를 순서대로 출제하고, 다 풀면 결과를 보여 준다."""
+        if not self.quizzes:
+            print("\n📭 등록된 퀴즈가 없습니다. 먼저 '2. 퀴즈 추가'로 퀴즈를 등록하세요.")
+            return
+
+        total = len(self.quizzes)
+        correct = 0
+        print(f"\n📝 퀴즈를 시작합니다! (총 {total}문제)")
+        for number, quiz in enumerate(self.quizzes, start=1):
+            print()
+            print(THIN_LINE)
+            quiz.display(number)
+            answer = read_int("정답 입력: ", 1, Quiz.CHOICE_COUNT)
+            if quiz.is_correct(answer):
+                correct += 1
+                print("✅ 정답입니다!")
+            else:
+                print(f"❌ 오답입니다. 정답은 {quiz.answer}번 '{quiz.correct_choice()}'입니다.")
+
+        score = self.calculate_score(correct, total)
+        print()
+        print(LINE)
+        print(f"🏆 결과: {total}문제 중 {correct}문제 정답! ({score}점)")
+        print(LINE)
+
+    @staticmethod
+    def calculate_score(correct, total):
+        """정답 수를 100점 만점 점수로 바꾼다."""
+        return round(correct / total * 100)
 
     def exit_game(self):
         print("👋 게임을 종료합니다. 다음에 또 만나요!")
