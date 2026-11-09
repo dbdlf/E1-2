@@ -1,5 +1,6 @@
 """게임 전체 흐름을 관리하는 QuizGame 클래스."""
 
+from default_quizzes import create_default_quizzes
 from input_utils import read_int
 
 LINE = "=" * 40
@@ -9,6 +10,7 @@ class QuizGame:
     """메뉴를 보여 주고, 사용자가 고른 기능을 실행한다."""
 
     def __init__(self):
+        self.quizzes = create_default_quizzes()
         self.running = False
 
     def run(self):
