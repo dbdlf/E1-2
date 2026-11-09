@@ -1,8 +1,13 @@
 """퀴즈 게임 실행 진입점: python main.py"""
 
 import sys
+from pathlib import Path
 
 from quiz_game import QuizGame
+from storage import StateStorage
+
+# 실행 위치와 상관없이 항상 프로젝트 루트(main.py가 있는 폴더)의 state.json을 사용한다.
+STATE_FILE = Path(__file__).resolve().parent / "state.json"
 
 
 def configure_console() -> None:
@@ -15,7 +20,7 @@ def configure_console() -> None:
 
 def main() -> None:
     configure_console()
-    game = QuizGame()
+    game = QuizGame(StateStorage(STATE_FILE))
     game.run()
 
 
