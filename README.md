@@ -175,3 +175,9 @@ E1-2/
   - `feature/play-quiz` — 퀴즈 풀기 기능
   - `feature/storage` — `state.json` 저장/불러오기
 - 커밋 그래프 확인: `git log --oneline --graph`
+
+## 9. clone / pull 실습 기록
+
+1. `git clone https://github.com/dbdlf/E1-2.git E1-2-clone` 으로 별도 디렉터리에 저장소를 복제했습니다.
+2. 복제본(`E1-2-clone`)에서 이 섹션을 추가해 `commit` → `push` 했습니다.
+3. 기존 작업 디렉터리(`E1-2`)에서 `git pull` 로 이 변경 사항을 가져와 반영을 확인했습니다.
