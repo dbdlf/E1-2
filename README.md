@@ -165,6 +165,8 @@ Windows Terminal에서 `python main.py`를 실행한 실제 화면입니다. (`d
   - `feature/storage` — `state.json` 저장/불러오기
 - 커밋 그래프 확인: `git log --oneline --graph`
 
+![git log --oneline --graph](docs/screenshots/git_log.png)
+
 ## 9. clone / pull 실습 기록
 
 1. `git clone https://github.com/dbdlf/E1-2.git E1-2-clone` 으로 별도 디렉터리에 저장소를 복제했습니다.
