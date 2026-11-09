@@ -21,7 +21,12 @@ def configure_console() -> None:
 def main() -> None:
     configure_console()
     game = QuizGame(StateStorage(STATE_FILE))
-    game.run()
+    try:
+        game.run()
+    except KeyboardInterrupt:
+        # 데이터를 불러오는 도중처럼 게임 루프 밖에서 Ctrl+C가 눌린 경우.
+        # 상태가 아직 준비되지 않았을 수 있으므로 저장하지 않고 종료한다.
+        print("\n👋 프로그램을 종료합니다.")
 
 
 if __name__ == "__main__":

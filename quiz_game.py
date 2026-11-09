@@ -24,19 +24,27 @@ class QuizGame:
         self.print_title()
         self.load_state()
         self.running = True
-        while self.running:
-            self.show_menu()
-            choice = read_int("선택: ", 1, 5)
-            if choice == 1:
-                self.play_quiz()
-            elif choice == 2:
-                self.add_quiz()
-            elif choice == 3:
-                self.list_quizzes()
-            elif choice == 4:
-                self.show_score()
-            else:
-                self.exit_game()
+        try:
+            while self.running:
+                self.show_menu()
+                choice = read_int("선택: ", 1, 5)
+                if choice == 1:
+                    self.play_quiz()
+                elif choice == 2:
+                    self.add_quiz()
+                elif choice == 3:
+                    self.list_quizzes()
+                elif choice == 4:
+                    self.show_score()
+                else:
+                    self.exit_game()
+        except (KeyboardInterrupt, EOFError):
+            # Ctrl+C 또는 입력 스트림 종료(Ctrl+Z/Ctrl+D) 시에도 저장 후 안전하게 종료한다.
+            print("\n\n⚠️ 입력이 중단되어 프로그램을 종료합니다.")
+            if self.save_state():
+                print("💾 데이터를 저장했습니다.")
+            print("👋 안전하게 종료되었습니다.")
+            self.running = False
 
     def print_title(self):
         print(LINE)
