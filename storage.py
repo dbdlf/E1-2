@@ -11,6 +11,11 @@ class StateFileError(Exception):
     """state.json 내용이 손상되었거나 형식이 올바르지 않을 때 발생하는 예외."""
 
 
+def _is_int(value) -> bool:
+    """bool(True/False)을 제외한 진짜 정수인지 확인한다. (bool은 int의 하위 타입)"""
+    return isinstance(value, int) and not isinstance(value, bool)
+
+
 class StateStorage:
     """퀴즈 목록과 최고 점수를 JSON 파일(UTF-8)로 저장하고 불러온다.
 
@@ -18,9 +23,11 @@ class StateStorage:
     {
         "quizzes": [{"question": str, "choices": [str x4], "answer": 1~4}, ...],
         "best_score": 0~100 또는 null,
-        "best_correct": 정답 수 또는 null,
-        "best_total": 푼 문제 수 또는 null
+        "best_correct": 정답 수 또는 null,   (선택 항목)
+        "best_total": 푼 문제 수 또는 null   (선택 항목)
     }
+    필수 키는 quizzes 하나이며, {"quizzes": [...], "best_score": 3} 같은
+    최소 형식도 그대로 읽을 수 있다.
     """
 
     def __init__(self, path: str | Path):
@@ -95,11 +102,14 @@ class StateStorage:
             # 아직 한 번도 풀지 않은 상태
             best_correct = best_total = None
         else:
-            values = (best_score, best_correct, best_total)
-            if not all(isinstance(v, int) and not isinstance(v, bool) for v in values):
-                raise StateFileError("최고 점수 기록이 올바른 숫자가 아닙니다.")
-            if not (0 <= best_score <= 100 and 0 <= best_correct <= best_total and best_total > 0):
-                raise StateFileError("최고 점수 기록의 값 범위가 올바르지 않습니다.")
+            if not _is_int(best_score) or not 0 <= best_score <= 100:
+                raise StateFileError("best_score는 0~100 사이의 정수여야 합니다.")
+            if best_correct is None or best_total is None:
+                # 최소 형식: 점수만 있고 상세 기록(정답 수/문제 수)은 없는 경우
+                best_correct = best_total = None
+            elif not (_is_int(best_correct) and _is_int(best_total)
+                      and 0 <= best_correct <= best_total and best_total > 0):
+                raise StateFileError("best_correct/best_total 값이 올바르지 않습니다.")
 
         return {
             "quizzes": quizzes,
