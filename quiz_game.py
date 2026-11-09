@@ -185,13 +185,12 @@ class QuizGame:
         """저장된 최고 점수를 보여 준다."""
         if self.best_score is None:
             print("\n🏆 아직 퀴즈를 푼 기록이 없습니다. '1. 퀴즈 풀기'로 도전해 보세요!")
-            return
-        if self.best_total is None:
+        elif self.best_total is None:
             # 상세 기록 없이 점수만 저장된 state.json을 불러온 경우
             print(f"\n🏆 최고 점수: {self.best_score}점")
-            return
-        print(f"\n🏆 최고 점수: {self.best_score}점 "
-              f"({self.best_total}문제 중 {self.best_correct}문제 정답)")
+        else:
+            print(f"\n🏆 최고 점수: {self.best_score}점 "
+                  f"({self.best_total}문제 중 {self.best_correct}문제 정답)")
 
     # ------------------------------------------------------------------
     # 파일 저장 / 불러오기
